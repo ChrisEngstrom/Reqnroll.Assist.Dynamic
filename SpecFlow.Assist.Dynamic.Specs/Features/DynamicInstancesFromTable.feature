@@ -10,7 +10,7 @@ Scenario: Create dynamic instance from table with one row
 	Then the Name property should equal 'Marcus'
 		And the Age property should equal 39
 		And the BirthDate property should equal 1972-10-09
-		And the LengthInMeters property should equal 1.96
+		And the LengthInMeters property should equal '1.96'
 
 Scenario: Create dynamic instance from table with one row and 2 columns
 	When I create a dynamic instance from this table
@@ -29,4 +29,4 @@ Scenario: Create dynamic instance from table with Field and Values
 	Then the Name property should equal 'Marcus'
 		And the Age property should equal 39
 		And the BirthDate property should equal 1972-10-09
-		And the LengthInMeters property should equal 1.96
+		And the LengthInMeters property should equal '1.96'
