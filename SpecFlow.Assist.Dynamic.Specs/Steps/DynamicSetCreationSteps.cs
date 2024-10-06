@@ -20,13 +20,13 @@ public class DynamicSetCreationSteps
 
     [Given(@"I create a set of dynamic instances from this table")]
     [When(@"I create a set of dynamic instances from this table")]
-    public void WithMethodBInding(Table table)
+    public void WithMethodBinding(Table table)
     {
         this.state.OriginalSet = table.CreateDynamicSet().ToList();
     }
 
     [Given(@"I create a set of dynamic instances from this table using no type conversion")]
-    public void WithMethodBIndingNoTypeConversion(Table table)
+    public void WithMethodBindingNoTypeConversion(Table table)
     {
         this.state.OriginalSet = table.CreateDynamicSet(false).ToList();
     }
