@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace TechTalk.SpecFlow.Assist
+namespace TechTalk.SpecFlow.Assist;
+
+public class DynamicInstanceFromTableException : Exception
 {
-    public class DynamicInstanceFromTableException : Exception
-    {
-        public DynamicInstanceFromTableException(string message) : base(message) { }
-    }
+    public DynamicInstanceFromTableException(string message) : base(message) { }
 }
