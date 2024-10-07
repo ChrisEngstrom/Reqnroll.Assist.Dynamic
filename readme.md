@@ -1,6 +1,6 @@
-# SpecFlow.Assist.Dynamic
+# Reqnroll.Assist.Dynamic
 
-SpecFlow.Assist.Dynamic is a couple of simple extension methods for the SpecFlow Table object that helps you to write less code. 
+Reqnroll.Assist.Dynamic is a couple of simple extension methods for the Reqnroll DataTable object that helps you to write less code. 
 
 What would you rather write? 
 This:
@@ -11,7 +11,7 @@ public class StepsUsingStaticType
     private Person _person;
 
     [Given(@"I create an instance from this table")]
-    public void GivenICreateAnInstanceFromThisTable(Table table)
+    public void GivenICreateAnInstanceFromThisTable(DataTable table)
     {
         _person = table.CreateInstance<Person>();
     }
@@ -19,7 +19,7 @@ public class StepsUsingStaticType
     [Then(@"the Name property on Person should equal '(.*)'")]
     public void PersonNameShouldBe(string expectedValue)
     {
-        Assert.AreEqual(expectedValue, _person.Name);
+        Assert.That(_person.Name, Is.EqualTo(expectedValue));
     }
 }
 
@@ -48,12 +48,15 @@ public class StepsUsingDynamic
     public void c(dynamic instance) { _instance = instance; }
 
     [Then(@"the Name property should equal '(.*)'")]
-    public void NameShouldBe(string expectedValue) { Assert.AreEqual(expectedValue, _instance.Name);  }
+    public void NameShouldBe(string expectedValue)
+    {
+        Assert.That(_instance.Name, Is.EqualTo(expectedValue));
+    }
 }
 ```
-The later version uses SpecFlow.Assist.Dynamic. Shorter, sweater and more fun!
+The later version uses Reqnroll.Assist.Dynamic. Shorter, sweeter and more fun!
 
-> well, this is may be one of the best usecase for dynamic i have ever seen
->> A happy SpecFlow.Assists.Dynamic user
+> well, this is may be one of the best usecases for dynamic i have ever seen
+>> A happy Reqnroll.Assists.Dynamic user
 
 Full [documentation on the wiki](https://github.com/marcusoftnet/SpecFlow.Assist.Dynamic/wiki/Documentation)
