@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-using Reqnroll;
+﻿using NUnit.Framework;
 using Reqnroll.Assist;
 
-namespace Specs.Steps;
+namespace Specflow.Assist.Dynamic.Specs.StepDefinitions;
 
 [Binding]
 public class DynamicSetComparisonSteps
@@ -14,7 +12,7 @@ public class DynamicSetComparisonSteps
 
     private DynamicSetComparisonException GetSetComparisonException()
     {
-        return this.state.CurrentException as DynamicSetComparisonException;
+        return (DynamicSetComparisonException)state.CurrentException;
     }
 
     private void CheckForOneDifferenceContainingString(string expectedString)
@@ -22,10 +20,10 @@ public class DynamicSetComparisonSteps
         var ex = GetSetComparisonException();
         var diffs = ((List<string>)ex.Differences);
         var diff = diffs.Find(f => f.Contains(expectedString));
-        Assert.NotNull(diff);
+        Assert.That(diff, Is.Not.Null);
     }
 
-    [When(@"I compare the set to this table")]
+    [When(@"^I compare the set to this table$")]
     public void CompareSetToInstance(DataTable table)
     {
         try
@@ -38,7 +36,7 @@ public class DynamicSetComparisonSteps
         }
     }
 
-    [When(@"I compare the set to this table using no type conversion")]
+    [When(@"^I compare the set to this table using no type conversion$")]
     public void CompareSetToInstanceNoConversion(DataTable table)
     {
         try
@@ -51,47 +49,48 @@ public class DynamicSetComparisonSteps
         }
     }
 
-    [Then(@"no set comparison exception should have been thrown")]
+    [Then(@"^no set comparison exception should have been thrown$")]
     public void NoSetExceptionThrown()
     {
-        Assert.IsNull(this.state.CurrentException);
+        Assert.That(this.state.CurrentException, Is.Null);
     }
 
-    [Then(@"an set comparison exception should be thrown")]
+    [Then(@"^an set comparison exception should be thrown$")]
     public void SetComparisonExceptionThrown()
     {
-        Assert.NotNull(GetSetComparisonException());
+        Assert.That(GetSetComparisonException(), Is.Not.Null);
     }
 
-    [Then(@"an set comparision exception should be thrown with (\d+) differences")]
-    [Then(@"an set comparision exception should be thrown with (\d+) difference")]
+    [Then(@"^an set comparision exception should be thrown with (\d+) differences$")]
+    [Then(@"^an set comparision exception should be thrown with (\d+) difference$")]
     public void SetComparisionExceptionWithNumberOfDifferences(int expectedNumberOfDifference)
     {
         SetComparisonExceptionThrown();
-        Assert.AreEqual(expectedNumberOfDifference, GetSetComparisonException().Differences.Count);
+        var actual = GetSetComparisonException().Differences.Count;
+        Assert.That(actual, Is.EqualTo(expectedNumberOfDifference), $"Expected {actual} to be {expectedNumberOfDifference}");
     }
 
-    [Then(@"the error message for different rows should expect (.*) for table and (.*) for instance")]
+    [Then(@"^the error message for different rows should expect (.*) for table and (.*) for instance$")]
     public void ShouldDifferInRowCount(string tableRowCountString, string instanceRowCountString)
     {
         var message = GetSetComparisonException().Message;
-        Assert.IsTrue(message.Contains(tableRowCountString));
-        Assert.IsTrue(message.Contains(instanceRowCountString));
+        Assert.That(message.Contains(tableRowCountString), Is.True);
+        Assert.That(message.Contains(instanceRowCountString), Is.True);
     }
 
-    [Then(@"one set difference should be on the (.*) column of the table")]
+    [Then(@"^one set difference should be on the (.*) column of the table$")]
     public void DifferenceOnTheColumnOfTheTable(string expectedColumnToDiffer)
     {
         CheckForOneDifferenceContainingString(expectedColumnToDiffer);
     }
 
-    [Then(@"one set difference should be on the (.*) field of the instance")]
+    [Then(@"^one set difference should be on the (.*) field of the instance$")]
     public void DifferenceOnFieldOfInstance(string expectedFieldToDiffer)
     {
         CheckForOneDifferenceContainingString(expectedFieldToDiffer);
     }
 
-    [Then(@"(\d+) difference should be on row (\d+) on property '(.*)' for the values '(.*)' and '(.*)'")]
+    [Then(@"^(\d+) difference should be on row (\d+) on property '(.*)' for the values '(.*)' and '(.*)'$")]
     public void DifferenceOnValue(int differenceNumber, int rowNumber, string expectedProperty, string instanceValue, string tableRowValue)
     {
         var exception = GetSetComparisonException();

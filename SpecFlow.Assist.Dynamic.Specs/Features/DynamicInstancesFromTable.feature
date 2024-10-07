@@ -14,8 +14,8 @@ Scenario: Create dynamic instance from table with one row
 
 Scenario: Create dynamic instance from table with one row and 2 columns
 	When I create a dynamic instance from this table
-		| Name   | Age | 
-		| Marcus | 39  | 
+		| Name   | Age |
+		| Marcus | 39  |
 	Then the Name property should equal 'Marcus'
 		And the Age property should equal 39
 

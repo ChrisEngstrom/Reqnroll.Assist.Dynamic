@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-using Reqnroll;
+﻿using NUnit.Framework;
 using Reqnroll.Assist;
 
-namespace Specs.Steps;
+namespace Specflow.Assist.Dynamic.Specs.StepDefinitions;
 
 [Binding]
 public class DynamicInstanceComparisionSteps
@@ -13,8 +11,8 @@ public class DynamicInstanceComparisionSteps
 
     private DynamicInstanceComparisonException GetInstanceComparisonException()
     {
-        var ex = this.state.CurrentException as DynamicInstanceComparisonException;
-        Assert.NotNull(ex);
+        var ex = (DynamicInstanceComparisonException)this.state.CurrentException;
+        Assert.That(ex, Is.Not.Null);
         return ex;
     }
 
@@ -23,10 +21,10 @@ public class DynamicInstanceComparisionSteps
         var ex = GetInstanceComparisonException();
         var diffs = ((List<string>)ex.Differences);
         var diff = diffs.Find(f => f.Contains(expectedString));
-        Assert.NotNull(diff);
+        Assert.That(diff, Is.Not.Null);
     }
 
-    [When("I compare it to this table")]
+    [When("^I compare it to this table$")]
     public void ComparingAgainstDynamicInstance(DataTable table)
     {
         try
@@ -40,52 +38,52 @@ public class DynamicInstanceComparisionSteps
         }
     }
 
-    [Then("no instance comparison exception should have been thrown")]
+    [Then("^no instance comparison exception should have been thrown$")]
     public void NoException()
     {
-        Assert.IsNull(this.state.CurrentException);
+        Assert.That(this.state.CurrentException, Is.Null);
     }
 
-    [Then(@"an instance comparison exception should be thrown with (\d+) differences")]
-    [Then(@"an instance comparison exception should be thrown with (\d+) difference")]
+    [Then(@"^an instance comparison exception should be thrown with (\d+) differences$")]
+    [Then(@"^an instance comparison exception should be thrown with (\d+) difference$")]
     public void ExceptionShouldHaveBeenThrown(int expectedNumberOfDifferences)
     {
-        Assert.IsNotNull(this.state.CurrentException);
+        Assert.That(this.state.CurrentException, Is.Not.Null);
         var ex = GetInstanceComparisonException();
-        Assert.AreEqual(expectedNumberOfDifferences, ex.Differences.Count);
+        Assert.That(ex.Differences.Count, Is.EqualTo(expectedNumberOfDifferences), $"Expected {ex.Differences.Count} to be {expectedNumberOfDifferences}");
     }
 
-    [Then(@"one difference should be on the (.*) column of the table")]
+    [Then(@"^one difference should be on the (.*) column of the table$")]
     public void DifferenceOnTheColumnOfTheTable(string expectedColumnToDiffer)
     {
         CheckForOneDifferenceContainingString(expectedColumnToDiffer);
     }
 
-    [Then(@"one difference should be on the (.*) field of the instance")]
+    [Then(@"^one difference should be on the (.*) field of the instance$")]
     public void DifferenceOnFieldOfInstance(string expectedFieldToDiffer)
     {
         CheckForOneDifferenceContainingString(expectedFieldToDiffer);
     }
 
-    [Then(@"one message should state that the instance had the value (.*)")]
+    [Then(@"^one message should state that the instance had the value (.*)$")]
     public void ExceptionMessageValueOnInstance(string expectedValueOfInstance)
     {
         CheckForOneDifferenceContainingString(expectedValueOfInstance);
     }
 
-    [Then(@"one message should state that the table had the value (.*)")]
+    [Then(@"^one message should state that the table had the value (.*)$")]
     public void ExceptionMessageValueInTable(string expectedValueOfTable)
     {
         CheckForOneDifferenceContainingString(expectedValueOfTable);
     }
 
-    [Then(@"one difference should be on the (.*) property")]
+    [Then(@"^one difference should be on the (.*) property$")]
     public void ExceptionMessageValueOnProperty(string expectedPropertyName)
     {
         CheckForOneDifferenceContainingString(expectedPropertyName);
     }
 
-    [When(@"I compare it to this table using no type conversion")]
+    [When(@"^I compare it to this table using no type conversion$")]
     public void WhenICompareItToThisTableUsingNoTypeConversion(DataTable table)
     {
         try

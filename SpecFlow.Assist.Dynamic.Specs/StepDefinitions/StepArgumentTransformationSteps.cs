@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using Reqnroll;
-using Reqnroll.Assist;
+﻿using Reqnroll.Assist;
 
-namespace Specs.Steps;
+namespace Specflow.Assist.Dynamic.Specs.StepDefinitions;
 
 [Binding]
 public class StepArgumentTransformationSteps
@@ -11,25 +9,25 @@ public class StepArgumentTransformationSteps
 
     public StepArgumentTransformationSteps(State state) => this.state = state;
 
-    [Given(@"I create a set of dynamic instances from this table using step argument transformation")]
+    [Given(@"^I create a set of dynamic instances from this table using step argument transformation$")]
     public void a(IList<dynamic> dynamicSet)
     {
         this.state.OriginalSet = dynamicSet;
     }
 
-    [When(@"I compare the set to this table using step argument transformation")]
+    [When(@"^I compare the set to this table using step argument transformation$")]
     public void b(DataTable table)
     {
         table.CompareToDynamicSet(this.state.OriginalSet);
     }
 
-    [Given(@"I create a dynamic instance from this table using step argument transformation")]
+    [Given(@"^I create a dynamic instance from this table using step argument transformation$")]
     public void c(dynamic instance)
     {
         this.state.OriginalInstance = instance;
     }
 
-    [When(@"I compare it to this table using step argument transformation")]
+    [When(@"^I compare it to this table using step argument transformation$")]
     public void d(DataTable table)
     {
         var org = (object)this.state.OriginalInstance;

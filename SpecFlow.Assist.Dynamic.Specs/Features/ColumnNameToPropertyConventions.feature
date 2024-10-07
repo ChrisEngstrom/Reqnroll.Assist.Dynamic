@@ -3,11 +3,10 @@
 	I want my dynamic code to follow common conventions
 	So that I know how to access them
 
-
 Scenario: Single word in columns are left untouched
 	Given I create a dynamic instance from this table
-         | Name   | age |
-         | Marcus | 39  |
+		| Name   | age |
+		| Marcus | 39  |
 	Then the Name property should equal 'Marcus'
 		And the age property should equal 39
 
