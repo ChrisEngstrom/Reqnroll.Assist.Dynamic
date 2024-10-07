@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TechTalk.SpecFlow.Assist;
+namespace Reqnroll.Assist;
 
 public class DynamicInstanceFromTableException : Exception
 {

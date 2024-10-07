@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Dynamitey;
 
-namespace TechTalk.SpecFlow.Assist;
+namespace Reqnroll.Assist;
 
 public static class DynamicTableHelpers
 {
@@ -28,7 +27,7 @@ public static class DynamicTableHelpers
     /// <param name="table">the table to create a dynamic object from</param>
     /// <param name="doTypeConversion">should types be converted according to conventions described in https://github.com/marcusoftnet/SpecFlow.Assist.Dynamic/wiki/Conversion-conventions#property-type-conversions</param>
     /// <returns>the created object</returns>
-    public static ExpandoObject CreateDynamicInstance(this Table table, bool doTypeConversion = true)
+    public static ExpandoObject CreateDynamicInstance(this DataTable table, bool doTypeConversion = true)
     {
         if (table.Header.Count == 2 && table.RowCount > 1)
         {
@@ -51,7 +50,7 @@ public static class DynamicTableHelpers
     /// <param name="table">the table to create a set of dynamics from</param>
     /// <param name="doTypeConversion">should types be converted according to conventions described in https://github.com/marcusoftnet/SpecFlow.Assist.Dynamic/wiki/Conversion-conventions#property-type-conversions</param>
     /// <returns>a set of dynamics</returns>
-    public static IEnumerable<dynamic> CreateDynamicSet(this Table table, bool doTypeConversion = true)
+    public static IEnumerable<dynamic> CreateDynamicSet(this DataTable table, bool doTypeConversion = true)
     {
         return from r in table.Rows
                select CreateDynamicInstance(r, doTypeConversion);
@@ -64,7 +63,7 @@ public static class DynamicTableHelpers
     /// <param name="table">the table to compare the instance against</param>
     /// <param name="instance">the instance to compare the table against</param>
     /// <param name="doTypeConversion">should types be converted according to conventions described in https://github.com/marcusoftnet/SpecFlow.Assist.Dynamic/wiki/Conversion-conventions#property-type-conversions</param>
-    public static void CompareToDynamicInstance(this Table table, dynamic instance, bool doTypeConversion = true)
+    public static void CompareToDynamicInstance(this DataTable table, dynamic instance, bool doTypeConversion = true)
     {
         IList<string> propDiffs = GetPropertyDifferences(table, instance);
         if (propDiffs.Any())
@@ -80,7 +79,7 @@ public static class DynamicTableHelpers
     /// <param name="table">the table to compare the set against</param>
     /// <param name="set">the set to compare the table against</param>
     /// <param name="doTypeConversion">should types be converted according to conventions described in https://github.com/marcusoftnet/SpecFlow.Assist.Dynamic/wiki/Conversion-conventions#property-type-conversions</param>
-    public static void CompareToDynamicSet(this Table table, IList<dynamic> set, bool doTypeConversion = true)
+    public static void CompareToDynamicSet(this DataTable table, IList<dynamic> set, bool doTypeConversion = true)
     {
         AssertEqualNumberOfRows(table, set);
 
@@ -100,9 +99,9 @@ public static class DynamicTableHelpers
         }
     }
 
-    private static List<string> GetSetValueDifferences(Table table, IList<object> set, bool doTypeConversion = true)
+    private static List<string> GetSetValueDifferences(DataTable table, IList<object> set, bool doTypeConversion = true)
     {
-        var memberNames = Dynamic.GetMemberNames(set[0]);
+        var memberNames = Dynamitey.Dynamic.GetMemberNames(set[0]);
         var valueDifference = new List<string>();
 
         for (var i = 0; i < set.Count; i++)
@@ -112,7 +111,7 @@ public static class DynamicTableHelpers
                 var currentHeader = string.Empty;
                 var rowValue = GetRowValue(i, table, memberName, out currentHeader, doTypeConversion);
                 var rowType = rowValue.GetType().Name;
-                var instanceValue = Dynamic.InvokeGet(set[i], memberName);
+                var instanceValue = Dynamitey.Dynamic.InvokeGet(set[i], memberName);
                 var instanceType = instanceValue.GetType().Name;
 
                 if (!instanceValue.Equals(rowValue))
@@ -133,7 +132,7 @@ public static class DynamicTableHelpers
         return valueDifference;
     }
 
-    private static object GetRowValue(int rowIndex, Table table, string memberName, out string currentHeader, bool doTypeConversion = true)
+    private static object GetRowValue(int rowIndex, DataTable table, string memberName, out string currentHeader, bool doTypeConversion = true)
     {
         object rowValue = null;
         currentHeader = string.Empty;
@@ -149,22 +148,22 @@ public static class DynamicTableHelpers
         return rowValue;
     }
 
-    private static void AssertValuesOfRowDifference(TableRow tableRow, dynamic instance, bool doTypeConversion = true)
+    private static void AssertValuesOfRowDifference(DataTableRow tableRow, dynamic instance, bool doTypeConversion = true)
     {
         IList<string> valueDiffs = ValidateValuesOfRow(tableRow, instance, doTypeConversion);
         if (valueDiffs.Any())
             throw new DynamicInstanceComparisonException(valueDiffs);
     }
 
-    private static IList<string> GetPropertyDifferences(Table table, dynamic instance, bool doTypeConversion = true)
+    private static IList<string> GetPropertyDifferences(DataTable table, dynamic instance, bool doTypeConversion = true)
     {
         var tableHeadersAsPropertyNames = table.Header.Select(CreatePropertyName);
-        IEnumerable<string> instanceMembers = Dynamic.GetMemberNames(instance);
+        IEnumerable<string> instanceMembers = Dynamitey.Dynamic.GetMemberNames(instance);
 
         return GetPropertyNameDifferences(tableHeadersAsPropertyNames, instanceMembers);
     }
 
-    private static void AssertEqualNumberOfRows(Table table, IList<object> set)
+    private static void AssertEqualNumberOfRows(DataTable table, IList<object> set)
     {
         if (table.RowCount != set.Count)
         {
@@ -173,14 +172,14 @@ public static class DynamicTableHelpers
         }
     }
 
-    private static IList<string> ValidateValuesOfRow(TableRow tableRow, dynamic instance, bool doTypeConversion = true)
+    private static IList<string> ValidateValuesOfRow(DataTableRow tableRow, dynamic instance, bool doTypeConversion = true)
     {
         var valueDiffs = new List<string>();
 
         foreach (var header in tableRow.Keys)
         {
             var propertyName = CreatePropertyName(header);
-            var valueFromInstance = Dynamic.InvokeGet(instance, propertyName);
+            var valueFromInstance = Dynamitey.Dynamic.InvokeGet(instance, propertyName);
             var typeFromInstance = valueFromInstance.GetType().Name;
             var valueFromTable = CreateTypedValue(tableRow[header], doTypeConversion);
             var typeFromTable = valueFromTable.GetType().Name;
@@ -212,17 +211,17 @@ public static class DynamicTableHelpers
         return diffs;
     }
 
-    private static Table CreateHorizontalTable(Table verticalFieldValueTable)
+    private static DataTable CreateHorizontalTable(DataTable verticalFieldValueTable)
     {
         var dic = verticalFieldValueTable.
                         Rows.ToDictionary(row => row[0], row => row[1]);
 
-        var horizontalTable = new Table(dic.Keys.ToArray());
+        var horizontalTable = new DataTable(dic.Keys.ToArray());
         horizontalTable.AddRow(dic);
         return horizontalTable;
     }
 
-    private static ExpandoObject CreateDynamicInstance(TableRow tablerow, bool doTypeConversion = true)
+    private static ExpandoObject CreateDynamicInstance(DataTableRow tablerow, bool doTypeConversion = true)
     {
         dynamic expando = new ExpandoObject();
         var dicExpando = expando as IDictionary<string, object>;

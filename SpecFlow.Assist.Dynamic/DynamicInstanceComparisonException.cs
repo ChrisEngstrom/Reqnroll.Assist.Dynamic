@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TechTalk.SpecFlow.Assist;
+namespace Reqnroll.Assist;
 
 public class DynamicInstanceComparisonException : Exception
 {
