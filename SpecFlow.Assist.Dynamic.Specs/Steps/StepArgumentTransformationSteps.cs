@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll;
+using Reqnroll.Assist;
 
 namespace Specs.Steps;
 
@@ -18,7 +18,7 @@ public class StepArgumentTransformationSteps
     }
 
     [When(@"I compare the set to this table using step argument transformation")]
-    public void b(Table table)
+    public void b(DataTable table)
     {
         table.CompareToDynamicSet(this.state.OriginalSet);
     }
@@ -30,7 +30,7 @@ public class StepArgumentTransformationSteps
     }
 
     [When(@"I compare it to this table using step argument transformation")]
-    public void d(Table table)
+    public void d(DataTable table)
     {
         var org = (object)this.state.OriginalInstance;
         table.CompareToDynamicInstance(org);

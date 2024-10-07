@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll;
+using Reqnroll.Assist;
 
 namespace Specs.Steps;
 
@@ -27,7 +27,7 @@ public class DynamicInstanceComparisionSteps
     }
 
     [When("I compare it to this table")]
-    public void ComparingAgainstDynamicInstance(Table table)
+    public void ComparingAgainstDynamicInstance(DataTable table)
     {
         try
         {
@@ -86,7 +86,7 @@ public class DynamicInstanceComparisionSteps
     }
 
     [When(@"I compare it to this table using no type conversion")]
-    public void WhenICompareItToThisTableUsingNoTypeConversion(Table table)
+    public void WhenICompareItToThisTableUsingNoTypeConversion(DataTable table)
     {
         try
         {

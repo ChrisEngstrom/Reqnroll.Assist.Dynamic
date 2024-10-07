@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll;
+using Reqnroll.Assist;
 
 namespace Specs.Steps;
 
@@ -14,7 +14,7 @@ public class DynamicInstanceCreationSteps
 
     [Given(@"I create a dynamic instance from this table")]
     [When(@"I create a dynamic instance from this table")]
-    public void CreateDynamicInstanceFromTable(Table table)
+    public void CreateDynamicInstanceFromTable(DataTable table)
     {
         this.state.OriginalInstance = table.CreateDynamicInstance();
     }
@@ -108,7 +108,7 @@ public class DynamicInstanceCreationSteps
     }
 
     [When(@"I create a dynamic instance with only reserved chars")]
-    public void OnlyReservedChars(Table table)
+    public void OnlyReservedChars(DataTable table)
     {
         try
         {
@@ -130,7 +130,7 @@ public class DynamicInstanceCreationSteps
 
     [Given(@"I create a dynamic instance from this table using no type conversion")]
     [When(@"I create a dynamic instance from this table using no type conversion")]
-    public void WhenICreateADynamicInstanceFromThisTableUsingNoTypeConversion(Table table)
+    public void WhenICreateADynamicInstanceFromThisTableUsingNoTypeConversion(DataTable table)
     {
         this.state.OriginalInstance = table.CreateDynamicInstance(false);
     }

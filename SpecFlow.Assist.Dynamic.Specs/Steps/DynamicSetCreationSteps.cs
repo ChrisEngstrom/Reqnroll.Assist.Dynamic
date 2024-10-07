@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll;
+using Reqnroll.Assist;
 
 namespace Specs.Steps;
 
@@ -17,20 +17,18 @@ public class DynamicSetCreationSteps
         return this.state.OriginalSet[itemNumber - 1];
     }
 
-
     [Given(@"I create a set of dynamic instances from this table")]
     [When(@"I create a set of dynamic instances from this table")]
-    public void WithMethodBinding(Table table)
+    public void WithMethodBinding(DataTable table)
     {
         this.state.OriginalSet = table.CreateDynamicSet().ToList();
     }
 
     [Given(@"I create a set of dynamic instances from this table using no type conversion")]
-    public void WithMethodBindingNoTypeConversion(Table table)
+    public void WithMethodBindingNoTypeConversion(DataTable table)
     {
         this.state.OriginalSet = table.CreateDynamicSet(false).ToList();
     }
-
 
     [Then(@"I should have a list of (\d+) dynamic objects")]
     public void ShouldContain(int expectedNumberOfItems)
@@ -62,7 +60,6 @@ public class DynamicSetCreationSteps
         Assert.AreEqual(expectedAge, GetItem(itemNumber).Age);
     }
 
-
     [Then(@"the (\d+) item should have Name equal to '(.*)'")]
     public void ItemInSetShouldHaveExpectedName(int itemNumber, string expectedName)
     {
@@ -76,7 +73,7 @@ public class DynamicSetCreationSteps
     }
 
     [When(@"I create a set of dynamic instances from this table using no type conversion")]
-    public void WhenICreateASetOfDynamicInstancesFromThisTableUsingNoTypeConversion(Table table)
+    public void WhenICreateASetOfDynamicInstancesFromThisTableUsingNoTypeConversion(DataTable table)
     {
         this.state.OriginalSet = table.CreateDynamicSet(false).ToList();
     }

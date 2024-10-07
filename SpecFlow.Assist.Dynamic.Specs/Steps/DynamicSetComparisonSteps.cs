@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Reqnroll;
+using Reqnroll.Assist;
 
 namespace Specs.Steps;
 
@@ -26,7 +26,7 @@ public class DynamicSetComparisonSteps
     }
 
     [When(@"I compare the set to this table")]
-    public void CompareSetToInstance(Table table)
+    public void CompareSetToInstance(DataTable table)
     {
         try
         {
@@ -39,7 +39,7 @@ public class DynamicSetComparisonSteps
     }
 
     [When(@"I compare the set to this table using no type conversion")]
-    public void CompareSetToInstanceNoConversion(Table table)
+    public void CompareSetToInstanceNoConversion(DataTable table)
     {
         try
         {
@@ -70,7 +70,6 @@ public class DynamicSetComparisonSteps
         SetComparisonExceptionThrown();
         Assert.AreEqual(expectedNumberOfDifference, GetSetComparisonException().Differences.Count);
     }
-
 
     [Then(@"the error message for different rows should expect (.*) for table and (.*) for instance")]
     public void ShouldDifferInRowCount(string tableRowCountString, string instanceRowCountString)
