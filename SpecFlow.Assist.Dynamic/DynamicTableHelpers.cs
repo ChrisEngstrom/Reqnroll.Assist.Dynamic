@@ -221,15 +221,15 @@ public static class DynamicTableHelpers
         return horizontalTable;
     }
 
-    private static ExpandoObject CreateDynamicInstance(DataTableRow tablerow, bool doTypeConversion = true)
+    private static ExpandoObject CreateDynamicInstance(DataTableRow tableRow, bool doTypeConversion = true)
     {
         dynamic expando = new ExpandoObject();
         var dicExpando = expando as IDictionary<string, object>;
 
-        foreach (var header in tablerow.Keys)
+        foreach (var header in tableRow.Keys)
         {
             var propName = CreatePropertyName(header);
-            var propValue = CreateTypedValue(tablerow[header], doTypeConversion);
+            var propValue = CreateTypedValue(tableRow[header], doTypeConversion);
             dicExpando.Add(propName, propValue);
         }
 
